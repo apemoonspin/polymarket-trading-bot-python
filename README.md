@@ -1,2 +1,96 @@
-# polymarket-copy-bot
-Build a Python-based simulated copy-trading bot for Polymarket:  Market: BTC price UP / DOWN  Timeframe: 15-minute resolution  Mode: Backtest + paper trading  Strategy: Copy a “leader” trader’s positions  Output: PnL, win rate, drawdown, confusion matrix (Up/Down accuracy)
+# Polymarket Copy Trading Bot
+
+A Python-based simulated copy-trading bot for Polymarket that allows you to backtest and paper trade by copying a "leader" trader's positions on BTC price predictions.
+
+## Features
+
+- **Market**: BTC price UP/DOWN predictions
+- **Timeframe**: 15-minute resolution candles
+- **Modes**: 
+  - Backtest: Test strategy on historical simulated data
+  - Paper Trading: Practice with simulated real-time data
+- **Strategy**: Copy a leader trader's positions with confidence-based position sizing
+- **Performance Metrics**:
+  - Total PnL (Profit and Loss)
+  - Win rate
+  - Maximum drawdown
+  - Sharpe ratio
+  - Confusion matrix (UP/DOWN prediction accuracy)
+  - Precision and recall metrics
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/huahuajhu/polymarket-copy-bot.git
+cd polymarket-copy-bot
+```
+
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+## Usage
+
+### Quick Start
+
+Run a backtest with default settings:
+```bash
+python main.py --mode backtest
+```
+
+Run paper trading simulation:
+```bash
+python main.py --mode paper
+```
+
+### Generate Sample Data
+
+Generate sample market data and leader trades:
+```bash
+python main.py --generate-data --periods 1000
+```
+
+## Configuration
+
+Edit `src/config.py` to customize settings:
+
+```python
+# Market settings
+MARKET_NAME = "BTC_15MIN_UP_DOWN"
+RESOLUTION_MINUTES = 15
+
+# Trading settings
+STARTING_BALANCE = 10000.0
+MAX_POSITION_SIZE = 0.1  # 10% of balance maximum
+TRADING_FEE = 0.02  # 2% per trade
+
+# Leader trader settings
+LEADER_SKILL_LEVEL = 0.65  # 65% win rate
+```
+
+## Project Structure
+
+```
+polymarket-copy-bot/
+├── data/                    # Data storage
+├── src/                     # Source code
+├── notebooks/               # Analysis notebooks
+├── tests/                   # Test suite
+├── requirements.txt         # Python dependencies
+├── README.md               # This file
+└── main.py                 # Main entry point
+```
+
+## Running Tests
+
+Run the test suite:
+
+```bash
+python -m unittest tests/test_simulator.py
+```
+
+## Disclaimer
+
+This is a simulation tool for educational purposes only. Not financial advice.
