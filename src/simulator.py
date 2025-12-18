@@ -98,8 +98,8 @@ class TradingSimulator:
         
         # Calculate position size: base * confidence * max_position_size
         # Use a smaller base and ensure we don't exceed available balance
-        base_size = min(self.starting_balance, self.balance) * self.max_position_size
-        position_size = base_size * leader_confidence
+        max_base_amount = min(self.starting_balance, self.balance) * self.max_position_size
+        position_size = max_base_amount * leader_confidence
         
         # Ensure we don't exceed available balance (keep some reserve)
         max_available = self.balance * 0.95
