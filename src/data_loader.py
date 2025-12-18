@@ -75,7 +75,7 @@ class DataLoader:
         
         # For numeric columns, use forward fill
         resampled = df.resample(freq).first()
-        resampled = resampled.fillna(method='ffill')
+        resampled = resampled.ffill()
         
         return resampled
     
