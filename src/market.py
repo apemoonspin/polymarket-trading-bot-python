@@ -4,7 +4,6 @@ Market simulation for BTC price movements.
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
-from typing import List
 
 
 class MarketSimulator:

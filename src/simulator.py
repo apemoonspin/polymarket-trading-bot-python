@@ -2,9 +2,7 @@
 Trading simulator for backtesting and paper trading.
 """
 import pandas as pd
-import numpy as np
-from typing import Dict, List, Tuple
-from datetime import datetime
+from typing import Dict
 
 
 class TradingSimulator:
@@ -118,19 +116,19 @@ class TradingSimulator:
         predicted = "UP" if leader_side == "LONG" else "DOWN"
         
         # Calculate PnL based on market outcome
-        # More realistic Polymarket model:
-        # - When you buy "YES" at price P, you pay P per share
-        # - If outcome is YES, you get $1 per share (profit = 1 - P)
-        # - If outcome is NO, you get $0 (loss = -P, i.e., you lose what you paid)
+        # Prediction market mechanics (binary contract):
+        # - entry_price is the cost per $1 payoff of a contract
+        # - We invest `effective_position` dollars at this entry_price
+        # - If prediction is correct: profit = effective_position * (1 - entry_price)
+        # - If prediction is wrong: loss = effective_position (lose the full investment)
         if predicted == actual_outcome:
             # Win: you bought at entry_price, outcome pays $1
             # Profit per dollar invested
             payout_ratio = (1.0 - entry_price) / entry_price  # Return on investment
             pnl = effective_position * payout_ratio
         else:
-            # Loss: you lose what you paid (entry_price portion of position)
-            # Not the entire position, just the premium paid
-            pnl = -effective_position * entry_price
+            # Loss: you lose the entire amount you invested in this position
+            pnl = -effective_position
         
         # Apply exit fee on profits
         if pnl > 0:

@@ -5,13 +5,30 @@ Supports both backtest and paper trading modes.
 import sys
 import argparse
 from datetime import datetime, timedelta
-import pandas as pd
 
-# Import all modules
-from src.config import *
+# Import configuration constants
+from src.config import (
+    BACKTEST_PERIODS,
+    PAPER_TRADE_PERIODS,
+    BTC_INITIAL_PRICE,
+    PRICE_VOLATILITY,
+    RANDOM_SEED,
+    LEADER_SKILL_LEVEL,
+    POSITION_SIZE,
+    LEADER_SEED,
+    DATA_DIR,
+    RESOLUTION_MINUTES,
+    BTC_PRICES_FILE,
+    LEADER_TRADES_FILE,
+    STARTING_BALANCE,
+    MAX_POSITION_SIZE,
+    TRADING_FEE,
+    SAVE_RESULTS,
+    MARKET_NAME,
+)
 from src.data_loader import DataLoader
 from src.market import MarketSimulator
-from src.leader import LeaderTrader, MarketEvaluator
+from src.leader import LeaderTrader
 from src.simulator import TradingSimulator
 from src.metrics import MetricsCalculator
 

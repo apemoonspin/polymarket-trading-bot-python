@@ -2,8 +2,7 @@
 Data loader for BTC prices and leader trades.
 """
 import pandas as pd
-import numpy as np
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 import os
 

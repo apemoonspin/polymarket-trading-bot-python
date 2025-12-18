@@ -4,7 +4,7 @@ Tests for the Polymarket Copy Trading Bot simulator.
 import unittest
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
+from datetime import datetime
 import sys
 import os
 
@@ -70,7 +70,7 @@ class TestLeaderTrader(unittest.TestCase):
     
     def test_get_signal(self):
         """Test getting signal for specific timestamp."""
-        trades = self.leader.generate_trades(self.market_data)
+        self.leader.generate_trades(self.market_data)
         
         timestamp = self.market_data.iloc[0]['timestamp']
         signal = self.leader.get_signal(timestamp)
@@ -174,6 +174,60 @@ class TestMetricsCalculator(unittest.TestCase):
         # Total should equal number of trades
         total = cm['TP'] + cm['TN'] + cm['FP'] + cm['FN']
         self.assertEqual(total, len(self.trades_df))
+
+
+class TestCopyTradingStrategy(unittest.TestCase):
+    """Test copy trading strategy."""
+    
+    def setUp(self):
+        from src.strategy import CopyTradingStrategy
+        
+        self.market_sim = MarketSimulator(seed=42)
+        self.leader = LeaderTrader(skill_level=0.65, seed=42)
+        
+        start_time = datetime(2024, 1, 1, 0, 0)
+        self.market_data = self.market_sim.generate_market_data(50, start_time)
+        self.leader_trades = self.leader.generate_trades(self.market_data)
+        
+        self.strategy = CopyTradingStrategy(
+            starting_balance=10000.0,
+            max_position_size=0.1,
+            trading_fee=0.01,
+            confidence_threshold=0.5
+        )
+    
+    def test_copy_trades(self):
+        """Test that strategy copies trades correctly."""
+        from src.strategy import CopyTradingStrategy
+        
+        trades_df = self.strategy.copy_trades(self.leader_trades, self.market_data)
+        
+        # Should have executed some trades
+        self.assertGreater(len(trades_df), 0)
+        
+        # Check required columns exist
+        self.assertIn('pnl', trades_df.columns)
+        self.assertIn('balance', trades_df.columns)
+        self.assertIn('correct', trades_df.columns)
+    
+    def test_final_balance(self):
+        """Test final balance calculation."""
+        self.strategy.copy_trades(self.leader_trades, self.market_data)
+        
+        final_balance = self.strategy.get_final_balance()
+        self.assertIsInstance(final_balance, float)
+        self.assertGreater(final_balance, 0)
+    
+    def test_total_pnl(self):
+        """Test total PnL calculation."""
+        self.strategy.copy_trades(self.leader_trades, self.market_data)
+        
+        total_pnl = self.strategy.get_total_pnl()
+        self.assertIsInstance(total_pnl, float)
+        
+        # PnL should equal final_balance - starting_balance
+        expected_pnl = self.strategy.get_final_balance() - 10000.0
+        self.assertAlmostEqual(total_pnl, expected_pnl, places=2)
 
 
 class TestDataLoader(unittest.TestCase):

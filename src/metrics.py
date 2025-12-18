@@ -3,16 +3,12 @@ Performance metrics calculation for trading strategies.
 """
 import pandas as pd
 import numpy as np
-from typing import Dict, Tuple
-from sklearn.metrics import confusion_matrix, classification_report
+from typing import Dict
+from sklearn.metrics import confusion_matrix
 
 
 class MetricsCalculator:
     """Calculate trading performance metrics."""
-    
-    def __init__(self):
-        """Initialize the metrics calculator."""
-        pass
     
     def calculate_all_metrics(self, trades_df: pd.DataFrame, starting_balance: float) -> Dict:
         """
@@ -59,24 +55,19 @@ class MetricsCalculator:
         y_true = trades_df['actual'].values
         y_pred = trades_df['predicted'].values
         
-        # Calculate confusion matrix
+        # Calculate confusion matrix with labels=['UP', 'DOWN']
+        # Rows are actual [UP, DOWN], columns are predicted [UP, DOWN]
         cm = confusion_matrix(y_true, y_pred, labels=['UP', 'DOWN'])
         
-        # True Positives (predicted UP, actual UP)
-        # True Negatives (predicted DOWN, actual DOWN)
-        # False Positives (predicted UP, actual DOWN)
-        # False Negatives (predicted DOWN, actual UP)
-        tn, fp, fn, tp = 0, 0, 0, 0
-        
-        for true, pred in zip(y_true, y_pred):
-            if true == 'UP' and pred == 'UP':
-                tp += 1
-            elif true == 'DOWN' and pred == 'DOWN':
-                tn += 1
-            elif true == 'DOWN' and pred == 'UP':
-                fp += 1
-            elif true == 'UP' and pred == 'DOWN':
-                fn += 1
+        # Extract values from confusion matrix
+        # cm[0,0] = True Positives (actual UP, predicted UP)
+        # cm[0,1] = False Negatives (actual UP, predicted DOWN)
+        # cm[1,0] = False Positives (actual DOWN, predicted UP)
+        # cm[1,1] = True Negatives (actual DOWN, predicted DOWN)
+        tp = cm[0, 0]
+        fn = cm[0, 1]
+        fp = cm[1, 0]
+        tn = cm[1, 1]
         
         # Accuracy
         accuracy = (tp + tn) / num_trades if num_trades > 0 else 0.0

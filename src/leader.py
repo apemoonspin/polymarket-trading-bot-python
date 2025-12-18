@@ -3,7 +3,7 @@ Leader trader simulation with configurable skill level.
 """
 import pandas as pd
 import numpy as np
-from typing import List, Dict, Tuple, Optional
+from typing import Dict, Tuple, Optional, Any
 
 
 class LeaderTrader:
@@ -53,8 +53,8 @@ class LeaderTrader:
             # LONG = betting on UP, SHORT = betting on DOWN
             side = "LONG" if predicted_outcome == "UP" else "SHORT"
             
-            # Entry price represents the odds (simplified as 0.5 +/- noise)
-            entry_price = 0.5 + np.random.uniform(-0.05, 0.05)
+            # Entry price represents the odds (simplified as 0.5 +/- noise), clamped to (0, 1)
+            entry_price = float(np.clip(0.5 + np.random.uniform(-0.05, 0.05), 0.01, 0.99))
             
             # Confidence based on skill level with some randomness
             # Higher skill = higher average confidence
@@ -77,7 +77,7 @@ class LeaderTrader:
         
         return self.trades_df
     
-    def get_signal(self, timestamp: pd.Timestamp) -> Optional[Dict[str, any]]:
+    def get_signal(self, timestamp: pd.Timestamp) -> Optional[Dict[str, Any]]:
         """
         Get trading signal for a specific timestamp.
         

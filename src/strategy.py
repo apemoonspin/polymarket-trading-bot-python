@@ -2,8 +2,6 @@
 Copy trading strategy that mirrors the leader's positions.
 """
 import pandas as pd
-import numpy as np
-from typing import Dict, List, Tuple
 
 
 class CopyTradingStrategy:
@@ -69,13 +67,16 @@ class CopyTradingStrategy:
             predicted = "UP" if leader_trade['side'] == "LONG" else "DOWN"
             actual = market_row['actual_outcome']
             
-            # In prediction markets: if correct, you win (1 - entry_price), if wrong, you lose entry_price
-            # Simplified PnL calculation
+            # Prediction market payoff model (binary contract):
+            # - entry_price is the cost per $1 payoff of a contract that pays 1 if the outcome occurs, 0 otherwise.
+            # - We stake `effective_amount` dollars at this entry_price.
+            #   * If the prediction is correct, profit on the stake is: effective_amount * (1 - entry_price)
+            #   * If the prediction is wrong, loss on the stake is:   effective_amount (full investment lost)
             if predicted == actual:
                 # Win: get back investment + profit
                 pnl = effective_amount * (1 - leader_trade['entry_price'])
             else:
-                # Loss: lose the amount bet
+                # Loss: lose the entire amount invested
                 pnl = -effective_amount
             
             # Apply exit fee on profits
