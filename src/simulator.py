@@ -98,12 +98,14 @@ class TradingSimulator:
         if leader_confidence < self.confidence_threshold:
             return None
         
-        # Calculate position size: balance * confidence * max_position_size
-        # max_position_size is already a fraction, confidence scales it further
-        position_size = self.balance * leader_confidence * self.max_position_size
+        # Calculate position size: base * confidence * max_position_size
+        # Use a smaller base and ensure we don't exceed available balance
+        base_size = min(self.starting_balance, self.balance) * self.max_position_size
+        position_size = base_size * leader_confidence
         
-        # Ensure we don't exceed available balance
-        position_size = min(position_size, self.balance * 0.95)  # Keep 5% reserve
+        # Ensure we don't exceed available balance (keep some reserve)
+        max_available = self.balance * 0.95
+        position_size = min(position_size, max_available)
         
         if position_size < 1.0:  # Minimum trade size
             return None
@@ -116,13 +118,19 @@ class TradingSimulator:
         predicted = "UP" if leader_side == "LONG" else "DOWN"
         
         # Calculate PnL based on market outcome
-        # Simplified Polymarket model: win = get back (1-entry_price) ratio, lose = lose bet
+        # More realistic Polymarket model:
+        # - When you buy "YES" at price P, you pay P per share
+        # - If outcome is YES, you get $1 per share (profit = 1 - P)
+        # - If outcome is NO, you get $0 (loss = -P, i.e., you lose what you paid)
         if predicted == actual_outcome:
-            # Win: profit based on odds
-            pnl = effective_position * (1 - entry_price)
+            # Win: you bought at entry_price, outcome pays $1
+            # Profit per dollar invested
+            payout_ratio = (1.0 - entry_price) / entry_price  # Return on investment
+            pnl = effective_position * payout_ratio
         else:
-            # Loss: lose the effective position
-            pnl = -effective_position
+            # Loss: you lose what you paid (entry_price portion of position)
+            # Not the entire position, just the premium paid
+            pnl = -effective_position * entry_price
         
         # Apply exit fee on profits
         if pnl > 0:

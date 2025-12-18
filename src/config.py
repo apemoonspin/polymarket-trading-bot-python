@@ -10,9 +10,9 @@ PRICE_VOLATILITY = 0.005  # 0.5% per 15min period
 
 # Trading settings
 STARTING_BALANCE = 10000.0
-MAX_POSITION_SIZE = 1000.0  # Maximum USD per trade
+MAX_POSITION_SIZE = 0.1  # Maximum 10% of balance per trade
 POSITION_SIZE = 100.0  # Default USD per trade
-TRADING_FEE = 0.02  # 2% fee per trade
+TRADING_FEE = 0.01  # 1% fee per trade (reduced for simulation)
 MAX_POSITIONS = 10
 
 # Leader trader settings
