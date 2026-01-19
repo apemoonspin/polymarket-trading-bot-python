@@ -1,6 +1,6 @@
-# Polymarket Copy Trading Bot
+# Polymarket Trading Bot (Python)
 
-A Python-based simulated copy-trading bot for Polymarket that allows you to backtest and paper trade by copying a "leader" trader's positions on BTC price predictions.
+A Python-based Polymarket bot and Polymarket trading bot for simulated copy-trading. Backtest and paper trade by copying a "leader" trader's positions on BTC price predictions with a powerful, professional workflow.
 
 ## Features
 
@@ -22,8 +22,8 @@ A Python-based simulated copy-trading bot for Polymarket that allows you to back
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/huahuajhu/polymarket-copy-bot.git
-cd polymarket-copy-bot
+git clone https://github.com/apemoonspin/polymarket-trading-bot-python.git
+cd polymarket-trading-bot-python
 ```
 
 2. Install dependencies:
@@ -73,8 +73,7 @@ LEADER_SKILL_LEVEL = 0.65  # 65% win rate
 ## Project Structure
 
 ```
-polymarket-copy-bot/
-├── data/                    # Data storage
+polymarket-trading-bot-python/
 ├── src/                     # Source code
 ├── notebooks/               # Analysis notebooks
 ├── tests/                   # Test suite
@@ -82,6 +81,25 @@ polymarket-copy-bot/
 ├── README.md               # This file
 └── main.py                 # Main entry point
 ```
+
+## Author
+
+- **GitHub**: https://github.com/apemoonspin
+- **Telegram**: https://t.me/apemoonspin
+- **Twitter/X**: https://x.com/apemoonspin
+For a more effective, updated bot that aims to be more reliable, or if you need help running this bot, please contact me using the links above.
+
+## SEO Keywords
+
+Polymarket bot, Polymarket trading bot, powerful Polymarket bot, powerful Polymarket trading bot, top powerful Polymarket trading bot.
+
+## GitHub SEO (Topics and Description)
+
+**Suggested repository description**:
+Polymarket bot and Polymarket trading bot in Python for backtesting and paper trading with a copy-trading strategy.
+
+**Suggested topics**:
+polymarket, polymarket-bot, polymarket-trading, polymarket-trading-bot, trading-bot, crypto, prediction-markets, backtesting, paper-trading, python
 
 ## Running Tests
 
